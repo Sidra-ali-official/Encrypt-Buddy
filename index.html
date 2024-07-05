@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Encrypt Master</title>
+  <title>EncryptMaster</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -30,17 +30,28 @@
 
     <label for="encrypted">Encrypted Message</label>
     <input id="encrypted" type="text" value="" readonly>
+
+    <hr>
+
+    <label for="decrypt">Decrypted Message</label>
+    <input id="decrypt" type="text" value="" readonly>
+
+    <button id="copyBtn">Copy Encrypted Message</button>
+    <button id="resetBtn">Reset</button>
   </div>
 
   <script>
     let originalInput = document.querySelector("#original");
     let shiftInput = document.querySelector("#shift");
     let encryptedInput = document.querySelector("#encrypted");
+    let decryptInput = document.querySelector("#decrypt");
 
     let originalMessage = originalInput.value;
 
     originalInput.addEventListener("input", characterEntered, false);
     shiftInput.addEventListener("input", numberEntered, false);
+    document.getElementById("copyBtn").addEventListener("click", copyToClipboard);
+    document.getElementById("resetBtn").addEventListener("click", resetForm);
 
     function characterEntered(e) {
       originalMessage = e.target.value.toLowerCase().replace(/[^a-z]/g, '');
@@ -61,6 +72,7 @@
       }
 
       encryptedInput.value = encryptedMessage;
+      startDecryption();
     }
 
     function shiftLetter(letter, shift) {
@@ -76,7 +88,29 @@
       return String.fromCharCode(newLetterCode);
     }
 
-    startEncryption();
+    function startDecryption() {
+      let decryptedMessage = "";
+      let shift = shiftInput.value ? Number(shiftInput.value) : 0;
+
+      for (letter of encryptedInput.value) {
+        decryptedMessage += shiftLetter(letter, -shift);
+      }
+
+      decryptInput.value = decryptedMessage;
+    }
+
+    function copyToClipboard() {
+      navigator.clipboard.writeText(encryptedInput.value)
+        .then(() => alert("Copied to clipboard!"))
+        .catch(err => alert("Failed to copy!"));
+    }
+
+    function resetForm() {
+      originalInput.value = "";
+      shiftInput.value = 0;
+      encryptedInput.value = "";
+      decryptInput.value = "";
+    }
 
     // Theme toggle
     const themeSwitch = document.querySelector(".theme-label");

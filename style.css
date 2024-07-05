@@ -49,7 +49,7 @@ input {
     width: calc(100% - 30px);
 }
 
-#encrypted {
+#encrypted, #decrypt {
     border-color: var(--dark);
     background-color: var(--dark);
     color: var(--white);
@@ -132,9 +132,9 @@ body.dark-theme input {
     border-color: var(--darkGray);
 }
 
-body.dark-theme #encrypted {
+body.dark-theme #encrypted, body.dark-theme #decrypt {
     background-color: var(--dark);
-    color: var (--white);
+    color: var(--white);
 }
 
 /* Media Queries for Responsiveness */
